@@ -5,10 +5,9 @@ import { lexicon } from '../../lib/lexicon'
 type Props = {
   isOpen: boolean
   handleClose: () => void
-  isEnglishMode: boolean
 }
 
-export const InfoModal = ({ isOpen, handleClose, isEnglishMode }: Props) => {
+export const InfoModal = ({ isOpen, handleClose }: Props) => {
   const modal = lexicon.infoModal
   return (
     <BaseModal title={modal.title} isOpen={isOpen} handleClose={handleClose}>
