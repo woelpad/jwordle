@@ -20,7 +20,7 @@ export const KEYS_EN = {
 export const INFO_MODAL_EN = {
   title: 'How to play',
   playMethod: 
-    'Guess the word in 6 or 7 tries. After each guess, the color of the tiles will ' +
+    'Guess the word in a limited number of tries. After each guess, the color of the tiles will ' +
     'change to show how close your guess was to the word.',
   correctSpot: (letter: string) => 
     `The letter ${letter} is in the word and in the correct spot.`,

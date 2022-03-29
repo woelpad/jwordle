@@ -5,7 +5,7 @@ export const ALERTS_JA = {
   notEnoughLetters: '文字が足りません',
   wordNotFound: '単語が見つかりません',
   newDay: '日にちとお題が変わりました！',
-  hardMode: 'ハードモードは始める前にしか変えられません！',
+  hardMode: '途中でハードモードにするはできません！',
   wrongSpot: (letter: string, position: number) =>
     `${position}番目の文字が「${letter}」でないといけません`,
   notContained: (letter: string) =>
@@ -23,14 +23,14 @@ export const INFO_MODAL_JA = {
     'お題を限らた回数で当てはめるゲームです。入力後に' +
     '各文字タイルの色が以下のように変わります。',
   correctSpot: (letter: string) => 
-    `「${letter}」の文字が正しいところに当てはまりました。`,
+    `「${letter}」は、文字と場所が合っています。`,
   differentSpot: (letter: string) =>
-    `「${letter}」の文字が間違ったところに当てはまりました。`,
+    `「${letter}」は、文字が合っていますが、場所が合っていません。`,
   noSpot: (letter: string) =>
-    `「${letter}」の文字がお題に入っていません。`,
+    `「${letter}」は、完全にお題に入っていません。`,
   options:
-    'ローマ字の式、および単語の文字数は、設定画面で変えられますので、' +
-    '毎日４つの新しいお題が待っています。',
+    'ローマ字の式、および単語の文字数は、設定画面で変えられます。' +
+    '各モードで毎日新しいお題が1つずつ、計4つが楽しめます。',
   credits: [
     '本作品は、オーペンソースプロジェクト ',
     ' を元に作られました。単語集は、辞書サイト ',
@@ -41,10 +41,10 @@ export const INFO_MODAL_JA = {
 export const SETTINGS_MODAL_JA = {
   title: '設定',
   wordProcessorModeName: 'ワープロモード',
-  wordProcessorModeDescription: 'ヘボン式の代わりに日本式が使用',
+  wordProcessorModeDescription: 'ヘボン式の代わりに日本式を使用',
   wordLengthName: '文字数の変更',
   hardModeName: 'ハードモード',
-  hardModeDescription: '露出したヒントを次の察しに使うことが必須',
+  hardModeDescription: '分かった文字を次の番に必ず使用',
   darkModeName: 'ダークモード',
   highContrastModeName: 'ハイコントラストモード',
   highContrastModeDescription: '色対象の向上',
