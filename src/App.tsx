@@ -11,6 +11,7 @@ import {
 import {
   REVEAL_TIME_MS,
   WELCOME_INFO_MODAL_MS,
+  DEFAULT_WORD_LENGTH,
 } from './constants/settings'
 import {
   isWordInWordList,
@@ -173,6 +174,7 @@ function App() {
     setStats(loadStats(isPractice, isWordProcessor, maxWordLength))
     setGuesses(loadGuesses(isPractice, isWordProcessor, maxWordLength))
   }
+
   const handleMaxWordLength = (wordLength: number) => {
     setMaxWordLength(wordLength)
     setStoredMaxWordLength(wordLength)
@@ -181,6 +183,20 @@ function App() {
     handlePracticeMode(isPractice)
     setStats(loadStats(isPractice, isWordProcessorMode, wordLength))
     setGuesses(loadGuesses(isPractice, isWordProcessorMode, wordLength))
+  }
+  const isAlternativeWordLength = () => {
+    return maxWordLength !== DEFAULT_WORD_LENGTH
+  }
+  const handleAlternativeWordLength = (alternative: boolean) => {
+    let wordLength = DEFAULT_WORD_LENGTH
+    if (alternative) {
+      getWordLengths().forEach(length => {
+        if (length != DEFAULT_WORD_LENGTH) {
+          wordLength = length
+        }
+      })
+    }
+    handleMaxWordLength(wordLength)
   }
 
   const [isHardMode, setIsHardMode] = useState(
@@ -439,8 +455,8 @@ function App() {
           handleClose={() => setIsSettingsModalOpen(false)}
           isWordProcessorMode={isWordProcessorMode}
           handleWordProcessorMode={handleWordProcessorMode}
-          maxWordLength={maxWordLength}
-          handleMaxWordLength={handleMaxWordLength}
+          isAlternativeWordLength={isAlternativeWordLength()}
+          handleAlternativeWordLength={handleAlternativeWordLength}
           isHardMode={isHardMode}
           handleHardMode={handleHardMode}
           isDarkMode={isDarkMode}

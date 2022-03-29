@@ -1,16 +1,14 @@
 import { BaseModal } from './BaseModal'
 import { SettingsToggle } from './SettingsToggle'
 import { lexicon } from '../../lib/lexicon'
-import { DEFAULT_WORD_LENGTH } from '../../constants/settings'
-import { getWordLengths } from '../../lib/words'
 
 type Props = {
   isOpen: boolean
   handleClose: () => void
   isWordProcessorMode: boolean
   handleWordProcessorMode: Function
-  maxWordLength: number
-  handleMaxWordLength: Function
+  isAlternativeWordLength: boolean
+  handleAlternativeWordLength: Function
   isHardMode: boolean
   handleHardMode: Function
   isDarkMode: boolean
@@ -26,8 +24,8 @@ export const SettingsModal = ({
   handleClose,
   isWordProcessorMode,
   handleWordProcessorMode,
-  maxWordLength,
-  handleMaxWordLength,
+  isAlternativeWordLength,
+  handleAlternativeWordLength,
   isHardMode,
   handleHardMode,
   isDarkMode,
@@ -49,18 +47,8 @@ export const SettingsModal = ({
         />
         <SettingsToggle
           settingName={modal.wordLengthName}
-          flag={maxWordLength !== DEFAULT_WORD_LENGTH}
-          handleFlag={(flag) => {
-            let wordLength = DEFAULT_WORD_LENGTH
-            if (flag) {
-              getWordLengths().forEach(length => {
-                if (length != DEFAULT_WORD_LENGTH) {
-                  wordLength = length
-                }
-              })
-            }
-            handleMaxWordLength(wordLength)
-          }}
+          flag={isAlternativeWordLength}
+          handleFlag={handleAlternativeWordLength}
         />
         <SettingsToggle
           settingName={modal.hardModeName}
