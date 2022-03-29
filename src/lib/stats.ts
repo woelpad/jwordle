@@ -1,14 +1,17 @@
-import { MAX_CHALLENGES } from '../constants/settings'
 import {
   GameStats,
   loadStatsFromLocalStorage,
   saveStatsToLocalStorage,
 } from './localStorage'
+import { getMaxChallenges } from './words'
 
 // In stats array elements 0-5 are successes in 1-6 trys
 
 export const addStatsForCompletedGame = (
   gameStats: GameStats,
+  isPracticeMode: boolean,
+  isWordProcessorMode: boolean,
+  wordLength: number,
   count: number
 ) => {
   // Count is number of incorrect guesses before end.
@@ -16,7 +19,7 @@ export const addStatsForCompletedGame = (
 
   stats.totalGames += 1
 
-  if (count >= MAX_CHALLENGES) {
+  if (count >= getMaxChallenges()) {
     // A fail situation
     stats.currentStreak = 0
     stats.gamesFailed += 1
@@ -31,21 +34,23 @@ export const addStatsForCompletedGame = (
 
   stats.successRate = getSuccessRate(stats)
 
-  saveStatsToLocalStorage(stats)
+  saveStatsToLocalStorage(stats, isPracticeMode, isWordProcessorMode, wordLength)
   return stats
 }
 
-const defaultStats: GameStats = {
-  winDistribution: Array.from(new Array(MAX_CHALLENGES), () => 0),
-  gamesFailed: 0,
-  currentStreak: 0,
-  bestStreak: 0,
-  totalGames: 0,
-  successRate: 0,
+const getDefaultStats = () => {
+  return <GameStats>({
+    winDistribution: Array.from(new Array(getMaxChallenges()), () => 0),
+    gamesFailed: 0,
+    currentStreak: 0,
+    bestStreak: 0,
+    totalGames: 0,
+    successRate: 0,
+  })
 }
 
-export const loadStats = () => {
-  return loadStatsFromLocalStorage() || defaultStats
+export const loadStats = (isPracticeMode: boolean, isWordProcessorMode: boolean, wordLength: number) => {
+  return loadStatsFromLocalStorage(isPracticeMode, isWordProcessorMode, wordLength) || getDefaultStats()
 }
 
 const getSuccessRate = (gameStats: GameStats) => {

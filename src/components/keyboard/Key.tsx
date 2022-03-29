@@ -1,7 +1,8 @@
 import { ReactNode } from 'react'
 import classnames from 'classnames'
 import { CharStatus } from '../../lib/statuses'
-import { MAX_WORD_LENGTH, REVEAL_TIME_MS } from '../../constants/settings'
+import { REVEAL_TIME_MS } from '../../constants/settings'
+import { getMaxWordLength } from '../../lib/words'
 import { getStoredIsHighContrastMode } from '../../lib/localStorage'
 
 type Props = {
@@ -21,7 +22,7 @@ export const Key = ({
   onClick,
   isRevealing,
 }: Props) => {
-  const keyDelayMs = REVEAL_TIME_MS * MAX_WORD_LENGTH
+  const keyDelayMs = REVEAL_TIME_MS * getMaxWordLength()
   const isHighContrast = getStoredIsHighContrastMode()
 
   const classes = classnames(
@@ -45,7 +46,7 @@ export const Key = ({
   const styles = {
     transitionDelay: isRevealing ? `${keyDelayMs}ms` : 'unset',
     width: `${width}px`,
-    height: '58px',
+    height: '52px',
   }
 
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {

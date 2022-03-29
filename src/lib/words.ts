@@ -1,13 +1,15 @@
-import { WORDS } from '../constants/wordlist'
-import { VALID_GUESSES } from '../constants/validGuesses'
-import { WRONG_SPOT_MESSAGE, NOT_CONTAINED_MESSAGE } from '../constants/strings'
+import { DEFAULT_WORD_LENGTH, GAME_EPOCH, TARGET_PROTECT_RATIO } from '../constants/settings'
+import { hepburnCollection, wordProcessorCollection } from './corpus'
+import { lexicon } from './lexicon'
 import { getGuessStatuses } from './statuses'
 import { default as GraphemeSplitter } from 'grapheme-splitter'
 
+let corpus = hepburnCollection[DEFAULT_WORD_LENGTH]
+
 export const isWordInWordList = (word: string) => {
   return (
-    WORDS.includes(localeAwareLowerCase(word)) ||
-    VALID_GUESSES.includes(localeAwareLowerCase(word))
+    corpus.targetWords.includes(localeAwareLowerCase(word)) ||
+    corpus.validGuesses.includes(localeAwareLowerCase(word))
   )
 }
 
@@ -32,7 +34,7 @@ export const findFirstUnusedReveal = (word: string, guesses: string[]) => {
       lettersLeftArray.push(guess[i])
     }
     if (statuses[i] === 'correct' && word[i] !== guess[i]) {
-      return WRONG_SPOT_MESSAGE(guess[i], i + 1)
+      return lexicon.alerts.wrongSpot(guess[i], i + 1)
     }
   }
 
@@ -47,7 +49,7 @@ export const findFirstUnusedReveal = (word: string, guesses: string[]) => {
   }
 
   if (lettersLeftArray.length > 0) {
-    return NOT_CONTAINED_MESSAGE(lettersLeftArray[0])
+    return lexicon.alerts.notContained(lettersLeftArray[0])
   }
   return false
 }
@@ -61,30 +63,83 @@ export const unicodeLength = (word: string) => {
 }
 
 export const localeAwareLowerCase = (text: string) => {
-  return process.env.REACT_APP_LOCALE_STRING
+  return (process.env.REACT_APP_LOCALE_STRING
     ? text.toLocaleLowerCase(process.env.REACT_APP_LOCALE_STRING)
-    : text.toLowerCase()
+    : text.toLowerCase()).replaceAll('－', '-')
 }
 
 export const localeAwareUpperCase = (text: string) => {
-  return process.env.REACT_APP_LOCALE_STRING
+  return (process.env.REACT_APP_LOCALE_STRING
     ? text.toLocaleUpperCase(process.env.REACT_APP_LOCALE_STRING)
-    : text.toUpperCase()
+    : text.toUpperCase()).replaceAll('-', '－')
 }
 
 export const getWordOfDay = () => {
-  // January 1, 2022 Game Epoch
-  const epochMs = new Date('January 1, 2022 00:00:00').valueOf()
+  const epochMs = new Date(GAME_EPOCH).valueOf()
   const now = Date.now()
   const msInDay = 86400000
-  const index = Math.floor((now - epochMs) / msInDay)
-  const nextday = (index + 1) * msInDay + epochMs
+  const offset = Math.floor((now - epochMs) / msInDay)
+  const nextday = (offset + 1) * msInDay + epochMs
+  const length = corpus.targetWords.length
+  const index = ((offset % length) + length) % length
 
   return {
-    solution: localeAwareUpperCase(WORDS[index % WORDS.length]),
-    solutionIndex: index,
+    daySolution: localeAwareUpperCase(corpus.targetWords[index]),
+    daySolutionIndex: index,
+    dayOffset: offset,
     tomorrow: nextday,
   }
 }
 
-export const { solution, solutionIndex, tomorrow } = getWordOfDay()
+export let { daySolution, daySolutionIndex, dayOffset, tomorrow } = getWordOfDay()
+
+export let solution = daySolution
+let solutionIndex = daySolutionIndex
+
+export const updateWordOfDay = () => {
+  let toSolve = getWordOfDay()
+  solution = daySolution = toSolve.daySolution
+  solutionIndex = daySolutionIndex = toSolve.daySolutionIndex
+  dayOffset = toSolve.dayOffset
+  tomorrow = toSolve.tomorrow
+}
+
+export const makePracticeWord = (word = '') => {
+  if (word) {
+    solutionIndex = corpus.targetWords.indexOf(localeAwareLowerCase(word))
+  } else {
+    // Pick a word outside a protected area centered on the current daySolutionIndex
+    solutionIndex = daySolutionIndex + Math.floor(((1 - TARGET_PROTECT_RATIO) * Math.random() + TARGET_PROTECT_RATIO / 2.) * corpus.targetWords.length)
+    word = corpus.targetWords[solutionIndex % corpus.targetWords.length]
+  }
+  solution = localeAwareUpperCase(word)
+}
+
+export const selectWordList = (isWordProcessorMode: boolean, wordLength: number) => {
+  corpus = isWordProcessorMode ? wordProcessorCollection[wordLength] : hepburnCollection[wordLength]
+  updateWordOfDay()
+}
+
+export const getWordLengths = () => {
+  return Object.keys(hepburnCollection).map(x => parseInt(x))
+}
+
+export const getMaxWordLength = () => {
+  return corpus.wordLength
+}
+
+export const getMaxChallenges = () => {
+  return corpus.maxChallenges
+}
+
+export const isWordProcessorMode = () => {
+  return corpus.style === 'WP'
+}
+
+export const getIdentification = () => {
+  return corpus.style + corpus.wordLength.toString()
+}
+
+export const getReadings = () => {
+  return <Array<Array<Array<string>>>>(corpus.thesaurus[solutionIndex].slice(1))
+}

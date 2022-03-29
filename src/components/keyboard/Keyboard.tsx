@@ -1,23 +1,27 @@
 import { getStatuses } from '../../lib/statuses'
 import { Key } from './Key'
 import { useEffect } from 'react'
-import { ENTER_TEXT, DELETE_TEXT } from '../../constants/strings'
+import { lexicon } from '../../lib/lexicon'
 import { localeAwareUpperCase } from '../../lib/words'
 
 type Props = {
   onChar: (value: string) => void
   onDelete: () => void
   onEnter: () => void
+  onEscape: () => void
   guesses: string[]
   isRevealing?: boolean
+  isWordProcessorMode: boolean
 }
 
 export const Keyboard = ({
   onChar,
   onDelete,
   onEnter,
+  onEscape,
   guesses,
   isRevealing,
+  isWordProcessorMode,
 }: Props) => {
   const charStatuses = getStatuses(guesses)
 
@@ -26,22 +30,58 @@ export const Keyboard = ({
       onEnter()
     } else if (value === 'DELETE') {
       onDelete()
+    } else if (value === 'ESCAPE') {
+      onEscape()
     } else {
       onChar(value)
     }
   }
 
+  const topRow: Array<string> = isWordProcessorMode ? 
+    ['G', 'Z', 'D', 'V', 'B', 'P', 'F', 'W'] :
+    ['G', 'Z', 'D', 'B', 'P', '\u0100', '\u012a', '\u016a', '\u0112', '\u014c']
+  const midRow: Array<string> = isWordProcessorMode ?
+    ['K', 'S', 'T', 'N', 'H', 'M', 'Y', 'R'] :
+    ['K', 'S', 'T', 'H', 'R', 'A', 'I', 'U', 'E', 'O']
+  const bottomRow: Array<string> = isWordProcessorMode ?
+    ['A', 'I', 'U', 'E', 'O', '\uff0d'] :
+    ['J', 'C', 'F', 'M', 'W', 'Y', 'V', 'N']
+  const unusedChars = isWordProcessorMode ? 'CJLQX' : 'LQX'
+  const hyphenatedVowels: { [char: string]: string; } = {
+    'A': '\u0100',
+    'I': '\u012a',
+    'U': '\u016a',
+    'E': '\u0112',
+    'O': '\u014c',
+  }
+  let isHyphenated: boolean = false
+
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
       if (e.code === 'Enter') {
         onEnter()
+        isHyphenated = false
       } else if (e.code === 'Backspace') {
         onDelete()
+        isHyphenated = false
+      } else if (e.code === 'Escape') {
+        onEscape()
+        isHyphenated = false
+      } else if (e.key === '-') {
+        if (isWordProcessorMode) {
+          onChar('\uff0d')
+        } else {
+          isHyphenated = true
+        }
       } else {
-        const key = localeAwareUpperCase(e.key)
+        let key = localeAwareUpperCase(e.key)
         // TODO: check this test if the range works with non-english letters
-        if (key.length === 1 && key >= 'A' && key <= 'Z') {
+        if (key.length === 1 && key >= 'A' && key <= 'Z' && unusedChars.indexOf(key) === -1) {
+          if (isHyphenated && (key in hyphenatedVowels)) {
+            key = hyphenatedVowels[key]
+          }
           onChar(key)
+          isHyphenated = false
         }
       }
     }
@@ -54,7 +94,7 @@ export const Keyboard = ({
   return (
     <div>
       <div className="flex justify-center mb-1">
-        {['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'].map((key) => (
+        {topRow.map((key) => (
           <Key
             value={key}
             key={key}
@@ -65,7 +105,7 @@ export const Keyboard = ({
         ))}
       </div>
       <div className="flex justify-center mb-1">
-        {['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'].map((key) => (
+        {midRow.map((key) => (
           <Key
             value={key}
             key={key}
@@ -77,9 +117,9 @@ export const Keyboard = ({
       </div>
       <div className="flex justify-center">
         <Key width={65.4} value="ENTER" onClick={onClick}>
-          {ENTER_TEXT}
+          {lexicon.keys.enter}
         </Key>
-        {['Z', 'X', 'C', 'V', 'B', 'N', 'M'].map((key) => (
+        {bottomRow.map((key) => (
           <Key
             value={key}
             key={key}
@@ -89,7 +129,7 @@ export const Keyboard = ({
           />
         ))}
         <Key width={65.4} value="DELETE" onClick={onClick}>
-          {DELETE_TEXT}
+          {lexicon.keys.delete}
         </Key>
       </div>
     </div>

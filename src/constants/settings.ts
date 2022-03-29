@@ -1,6 +1,8 @@
-export const MAX_WORD_LENGTH = 5
-export const MAX_CHALLENGES = 6
+export const GAME_TITLE = process.env.REACT_APP_GAME_NAME!
+export const GAME_EPOCH = 'April 1, 2022'
+export const DEFAULT_WORD_LENGTH = 5
 export const ALERT_TIME_MS = 2000
 export const REVEAL_TIME_MS = 350
-export const GAME_LOST_INFO_DELAY = (MAX_WORD_LENGTH + 1) * REVEAL_TIME_MS
 export const WELCOME_INFO_MODAL_MS = 350
+export const TARGET_PROTECT_RATIO = 1 / 3.
+export const LOOKUP_LINK = "http://nihongo.monash.edu/cgi-bin/wwwjdic?1MUJ"
