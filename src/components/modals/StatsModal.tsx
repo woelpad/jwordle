@@ -76,7 +76,7 @@ export const StatsModal = ({
       {(gameStats.totalGames > 0) && (
         <div>
           <h4 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100">
-            {modal.guessDistributionText}
+            {modal.guessDistribution}
           </h4>
           <Histogram gameStats={gameStats} />
         </div>
