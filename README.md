@@ -71,6 +71,6 @@ Open [http://localhost](http://localhost) in browser.
 ## Credits
 
 **Code base:** [React Wordle](https://github.com/cwackerfuss/react-wordle)  
-**Dictionary:** [WWWJDIC](http://nihongo.monash.edu/cgi-bin/wwwjdic) 
-**Frequency list:** [Charles Kelly's Online Japanese Language Study Materials](http://www.manythings.org/japanese/)
-**Romanization:** Built in-house, because not available in WWWJDIC
+**Dictionary:** [WWWJDIC](http://nihongo.monash.edu/cgi-bin/wwwjdic)  
+**Frequency list:** [Charles Kelly's Online Japanese Language Study Materials](http://www.manythings.org/japanese/)  
+**Romanization:** Built in-house, because not available in WWWJDIC  
