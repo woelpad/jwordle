@@ -173,6 +173,7 @@ function App() {
     handlePracticeMode(isPractice)
     setStats(loadStats(isPractice, isWordProcessor, maxWordLength))
     setGuesses(loadGuesses(isPractice, isWordProcessor, maxWordLength))
+    setCurrentGuess('')
   }
 
   const handleMaxWordLength = (wordLength: number) => {
@@ -183,6 +184,7 @@ function App() {
     handlePracticeMode(isPractice)
     setStats(loadStats(isPractice, isWordProcessorMode, wordLength))
     setGuesses(loadGuesses(isPractice, isWordProcessorMode, wordLength))
+    setCurrentGuess('')
   }
   const isAlternativeWordLength = () => {
     return maxWordLength !== DEFAULT_WORD_LENGTH
@@ -290,6 +292,7 @@ function App() {
         makePracticeWord(daySolution)
       }
       setGuesses(loadGuesses(isPractice, isWordProcessorMode, maxWordLength))
+      setCurrentGuess('')
     }
   }
 
