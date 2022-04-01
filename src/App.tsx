@@ -31,14 +31,20 @@ import {
   loadGameStateFromLocalStorage,
   saveGameStateToLocalStorage,
   saveStatsToLocalStorage,
-  setStoredIsHighContrastMode,
-  getStoredIsHighContrastMode,
-  setStoredIsWordProcessorMode,
-  getStoredIsWordProcessorMode,
-  getStoredMaxWordLength,
-  setStoredMaxWordLength,
   setStoredIsPracticeMode,
   getStoredIsPracticeMode,
+  setStoredIsWordProcessorMode,
+  getStoredIsWordProcessorMode,
+  setStoredMaxWordLength,
+  getStoredMaxWordLength,
+  setStoredIsHardMode,
+  getStoredIsHardMode,
+  setStoredIsDarkMode,
+  getStoredIsDarkMode,
+  setStoredIsHighContrastMode,
+  getStoredIsHighContrastMode,
+  setStoredIsEnglishMode,
+  getStoredIsEnglishMode,
 } from './lib/localStorage'
 import { default as GraphemeSplitter } from 'grapheme-splitter'
 
@@ -52,6 +58,7 @@ function App() {
     '(prefers-color-scheme: dark)'
   ).matches
   const prefersEnglishMode = navigator.language !== 'ja'
+  const prefersWordProcessorMode = !prefersEnglishMode
 
   const { showError: showErrorAlert, showSuccess: showSuccessAlert } =
     useAlert()
@@ -69,33 +76,28 @@ function App() {
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false)
   const [currentRowClass, setCurrentRowClass] = useState('')
   const [isGameLost, setIsGameLost] = useState(false)
-  const [isDarkMode, setIsDarkMode] = useState(
-    localStorage.getItem('theme')
-      ? localStorage.getItem('theme') === 'dark'
-      : prefersDarkMode
-      ? true
-      : false
-  )
-  const [isHighContrastMode, setIsHighContrastMode] = useState(
-    getStoredIsHighContrastMode()
-  )
   const [isPracticeMode, setIsPracticeMode] = useState(
-    getStoredIsPracticeMode()
+    getStoredIsPracticeMode(false)
   )
   const [isWordProcessorMode, setIsWordProcessorMode] = useState(
-    getStoredIsWordProcessorMode()
+    getStoredIsWordProcessorMode(prefersWordProcessorMode)
   )
   const [maxWordLength, setMaxWordLength] = useState(() => {
-    const wordLength = getStoredMaxWordLength()
+    const wordLength = getStoredMaxWordLength(DEFAULT_WORD_LENGTH)
     selectWordList(isWordProcessorMode, wordLength)
     return wordLength
   })
+  const [isHardMode, setIsHardMode] = useState(
+    getStoredIsHardMode(false)
+  )
+  const [isDarkMode, setIsDarkMode] = useState(
+    getStoredIsDarkMode(prefersDarkMode)
+  )
+  const [isHighContrastMode, setIsHighContrastMode] = useState(
+    getStoredIsHighContrastMode(false)
+  )
   const [isEnglishMode, setIsEnglishMode] = useState(() => {
-    const isInEnglish = localStorage.getItem('language')
-      ? localStorage.getItem('language') === 'en'
-      : prefersEnglishMode
-      ? true
-      : false
+    const isInEnglish = getStoredIsEnglishMode(prefersEnglishMode)
     selectLexicon(isInEnglish)
     return isInEnglish
   })
@@ -201,12 +203,6 @@ function App() {
     handleMaxWordLength(wordLength)
   }
 
-  const [isHardMode, setIsHardMode] = useState(
-    localStorage.getItem('gameMode')
-      ? localStorage.getItem('gameMode') === 'hard'
-      : false
-  )
-
   useEffect(() => {
     // if no game state on load,
     // show the user the how-to info modal
@@ -231,18 +227,18 @@ function App() {
     }
   }, [isDarkMode, isHighContrastMode])
 
-  const handleDarkMode = (isDark: boolean) => {
-    setIsDarkMode(isDark)
-    localStorage.setItem('theme', isDark ? 'dark' : 'light')
-  }
-
   const handleHardMode = (isHard: boolean) => {
-    if (guesses.length === 0 || localStorage.getItem('gameMode') === 'hard') {
+    if (guesses.length === 0 || isHardMode >= isHard) {
       setIsHardMode(isHard)
-      localStorage.setItem('gameMode', isHard ? 'hard' : 'normal')
+      setStoredIsHardMode(isHard)
     } else {
       showErrorAlert(lexicon.alerts.hardMode)
     }
+  }
+
+  const handleDarkMode = (isDark: boolean) => {
+    setIsDarkMode(isDark)
+    setStoredIsDarkMode(isDark)
   }
 
   const handleHighContrastMode = (isHighContrast: boolean) => {
@@ -253,7 +249,7 @@ function App() {
   const handleEnglishMode = (isInEnglish: boolean) => {
     setIsEnglishMode(isInEnglish)
     selectLexicon(isInEnglish)
-    localStorage.setItem('language', isInEnglish ? 'en' : 'ja')
+    setStoredIsEnglishMode(isInEnglish)
   }
 
   const clearCurrentRowClass = () => {

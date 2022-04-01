@@ -1,5 +1,3 @@
-import { DEFAULT_WORD_LENGTH } from "../constants/settings"
-
 const hepburnSuffix = '_hb'
 const wordProcessorSuffix = '_wp'
 
@@ -61,34 +59,26 @@ export const loadStatsFromLocalStorage = (isPractice: boolean, isWordProcessor: 
   return stats ? (JSON.parse(stats) as GameStats) : null
 }
 
-const highContrastKey = 'highContrast'
+const practiceKey = 'practice'
 
-export const setStoredIsHighContrastMode = (isHighContrast: boolean) => {
-  if (isHighContrast) {
-    localStorage.setItem(highContrastKey, '1')
-  } else {
-    localStorage.removeItem(highContrastKey)
-  }
+export const setStoredIsPracticeMode = (isPractice: boolean) => {
+  localStorage.setItem(practiceKey, isPractice ? '1' : '0')
 }
 
-export const getStoredIsHighContrastMode = () => {
-  const highContrast = localStorage.getItem(highContrastKey)
-  return highContrast === '1'
+export const getStoredIsPracticeMode = (defaultPractice: boolean) => {
+  const practice = localStorage.getItem(practiceKey)
+  return practice === null ? defaultPractice : practice !== '0'
 }
 
 const wordProcessorKey = 'wordProcessor'
 
 export const setStoredIsWordProcessorMode = (isWordProcessor: boolean) => {
-  if (isWordProcessor) {
-    localStorage.setItem(wordProcessorKey, '1')
-  } else {
-    localStorage.removeItem(wordProcessorKey)
-  }
+  localStorage.setItem(wordProcessorKey, isWordProcessor ? '1' : '0')
 }
 
-export const getStoredIsWordProcessorMode = () => {
+export const getStoredIsWordProcessorMode = (defaultWordProcessor: boolean) => {
   const wordProcessor = localStorage.getItem(wordProcessorKey)
-  return wordProcessor === '1'
+  return wordProcessor === null ? defaultWordProcessor : wordProcessor !== '0'
 }
 
 const wordLengthKey = 'wordLength'
@@ -97,26 +87,51 @@ export const setStoredMaxWordLength = (wordLength: number) => {
   localStorage.setItem(wordLengthKey, wordLength.toString())
 }
 
-export const getStoredMaxWordLength = () => {
+export const getStoredMaxWordLength = (defaultWordLength: number) => {
   const wordLength = localStorage.getItem(wordLengthKey)
-  if (wordLength === null) {
-    return DEFAULT_WORD_LENGTH
-  } else {
-    return parseInt(wordLength)
-  }
+  return wordLength === null ? defaultWordLength : parseInt(wordLength)
 }
 
-const practiceKey = 'practice'
+const difficultyKey = 'difficulty'
 
-export const setStoredIsPracticeMode = (isPractice: boolean) => {
-  if (isPractice) {
-    localStorage.setItem(practiceKey, '1')
-  } else {
-    localStorage.removeItem(practiceKey)
-  }
+export const setStoredIsHardMode = (isHard: boolean) => {
+  localStorage.setItem(difficultyKey, isHard ? 'hard' : 'normal')
 }
 
-export const getStoredIsPracticeMode = () => {
-  const practice = localStorage.getItem(practiceKey)
-  return practice === '1'
+export const getStoredIsHardMode = (defaultHard: boolean) => {
+  const difficulty = localStorage.getItem(difficultyKey)
+  return difficulty === null ? defaultHard : difficulty !== 'normal'
+}
+
+const themeKey = 'theme'
+
+export const setStoredIsDarkMode = (isDark: boolean) => {
+  localStorage.setItem(themeKey, isDark ? 'dark' : 'light')
+}
+
+export const getStoredIsDarkMode = (defaultDark: boolean) => {
+  const theme = localStorage.getItem(themeKey)
+  return theme === null ? defaultDark : theme !== 'light'
+}
+
+const highContrastKey = 'highContrast'
+
+export const setStoredIsHighContrastMode = (isHighContrast: boolean) => {
+  localStorage.setItem(highContrastKey, isHighContrast ? '1' : '0')
+}
+
+export const getStoredIsHighContrastMode = (defaultHighConstrast: boolean) => {
+  const highContrast = localStorage.getItem(highContrastKey)
+  return highContrast === null ? defaultHighConstrast : highContrast !== '0'
+}
+
+const languageKey = 'language'
+
+export const setStoredIsEnglishMode = (isEnglish: boolean) => {
+  localStorage.setItem(languageKey, isEnglish ? 'en' : 'ja')
+}
+
+export const getStoredIsEnglishMode = (defaultEnglish: boolean) => {
+  const language = localStorage.getItem(languageKey)
+  return language === null ? defaultEnglish : language !== 'ja'
 }
