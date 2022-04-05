@@ -418,6 +418,7 @@ function App() {
             guesses={guesses}
             currentGuess={currentGuess}
             isRevealing={isRevealing}
+            isHighContrast={isHighContrastMode}
             currentRowClassName={currentRowClass}
           />
         </div>
@@ -428,11 +429,13 @@ function App() {
           onEscape={onEscape}
           guesses={guesses}
           isRevealing={isRevealing}
-          isWordProcessorMode={isWordProcessorMode}
+          isHighContrast={isHighContrastMode}
+          isWordProcessor={isWordProcessorMode}
         />
         <InfoModal
           isOpen={isInfoModalOpen}
           handleClose={() => setIsInfoModalOpen(false)}
+          isHighContrastMode={isHighContrastMode}
         />
         <StatsModal
           isOpen={isStatsModalOpen}

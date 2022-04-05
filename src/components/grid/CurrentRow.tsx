@@ -1,6 +1,5 @@
-import { getMaxWordLength } from '../../lib/words'
 import { Cell } from './Cell'
-import { unicodeSplit } from '../../lib/words'
+import { getMaxWordLength, unicodeSplit } from '../../lib/words'
 
 type Props = {
   guess: string

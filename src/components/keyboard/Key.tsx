@@ -12,6 +12,7 @@ type Props = {
   status?: CharStatus
   onClick: (value: string) => void
   isRevealing?: boolean
+  isHighContrast?: boolean
 }
 
 export const Key = ({
@@ -21,9 +22,9 @@ export const Key = ({
   value,
   onClick,
   isRevealing,
+  isHighContrast,
 }: Props) => {
   const keyDelayMs = REVEAL_TIME_MS * getMaxWordLength()
-  const isHighContrast = getStoredIsHighContrastMode(false)
 
   const classes = classnames(
     'flex items-center justify-center rounded mx-0.5 text-xs font-bold cursor-pointer select-none dark:text-white',

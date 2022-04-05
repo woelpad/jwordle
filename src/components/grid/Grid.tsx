@@ -7,6 +7,7 @@ type Props = {
   guesses: string[]
   currentGuess: string
   isRevealing?: boolean
+  isHighContrast?: boolean
   currentRowClassName: string
 }
 
@@ -14,6 +15,7 @@ export const Grid = ({
   guesses,
   currentGuess,
   isRevealing,
+  isHighContrast,
   currentRowClassName,
 }: Props) => {
   const maxChallenges = getMaxChallenges()
@@ -29,6 +31,7 @@ export const Grid = ({
           key={i}
           guess={guess}
           isRevealing={isRevealing && guesses.length - 1 === i}
+          isHighContrast={isHighContrast}
         />
       ))}
       {guesses.length < maxChallenges && (

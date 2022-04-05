@@ -5,9 +5,10 @@ import { lexicon } from '../../lib/lexicon'
 type Props = {
   isOpen: boolean
   handleClose: () => void
+  isHighContrastMode: boolean
 }
 
-export const InfoModal = ({ isOpen, handleClose }: Props) => {
+export const InfoModal = ({ isOpen, handleClose, isHighContrastMode }: Props) => {
   const modal = lexicon.infoModal
   return (
     <BaseModal title={modal.title} isOpen={isOpen} handleClose={handleClose}>
@@ -18,6 +19,7 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
       <div className="flex justify-center mb-1 mt-4">
         <Cell
           isRevealing={true}
+          isHighContrast={isHighContrastMode}
           isCompleted={true}
           value="A"
           status="correct"
@@ -36,6 +38,7 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
         <Cell value="A" />
         <Cell
           isRevealing={true}
+          isHighContrast={isHighContrastMode}
           isCompleted={true}
           value="N"
           status="present"
@@ -52,7 +55,13 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
         <Cell value="I" />
         <Cell value="D" />
         <Cell value="E" />
-        <Cell isRevealing={true} isCompleted={true} value="O" status="absent" />
+        <Cell
+          isRevealing={true}
+          isHighContrast={isHighContrastMode}
+          isCompleted={true}
+          value="O"
+          status="absent"
+        />
       </div>
       <p className="text-sm text-gray-500 dark:text-gray-300">
         {modal.noSpot('O')}

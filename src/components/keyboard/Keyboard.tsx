@@ -11,7 +11,8 @@ type Props = {
   onEscape: () => void
   guesses: string[]
   isRevealing?: boolean
-  isWordProcessorMode: boolean
+  isHighContrast: boolean
+  isWordProcessor: boolean
 }
 
 export const Keyboard = ({
@@ -21,7 +22,8 @@ export const Keyboard = ({
   onEscape,
   guesses,
   isRevealing,
-  isWordProcessorMode,
+  isHighContrast,
+  isWordProcessor,
 }: Props) => {
   const charStatuses = getStatuses(guesses)
 
@@ -37,16 +39,16 @@ export const Keyboard = ({
     }
   }
 
-  const topRow: Array<string> = isWordProcessorMode ? 
+  const topRow: Array<string> = isWordProcessor ? 
     ['G', 'Z', 'D', 'V', 'B', 'P', 'F', 'W'] :
     ['G', 'Z', 'D', 'B', 'P', '\u0100', '\u012a', '\u016a', '\u0112', '\u014c']
-  const midRow: Array<string> = isWordProcessorMode ?
+  const midRow: Array<string> = isWordProcessor ?
     ['K', 'S', 'T', 'N', 'H', 'M', 'Y', 'R'] :
     ['K', 'S', 'T', 'H', 'R', 'A', 'I', 'U', 'E', 'O']
-  const bottomRow: Array<string> = isWordProcessorMode ?
+  const bottomRow: Array<string> = isWordProcessor ?
     ['A', 'I', 'U', 'E', 'O', '\uff0d'] :
     ['J', 'C', 'F', 'M', 'W', 'Y', 'V', 'N']
-  const unusedChars = isWordProcessorMode ? 'CJLQX' : 'LQX'
+  const unusedChars = isWordProcessor ? 'CJLQX' : 'LQX'
   const hyphenatedVowels: { [char: string]: string; } = {
     'A': '\u0100',
     'I': '\u012a',
@@ -68,7 +70,7 @@ export const Keyboard = ({
         onEscape()
         isHyphenated = false
       } else if (e.key === '-') {
-        if (isWordProcessorMode) {
+        if (isWordProcessor) {
           onChar('\uff0d')
         } else {
           isHyphenated = true
@@ -101,6 +103,7 @@ export const Keyboard = ({
             onClick={onClick}
             status={charStatuses[key]}
             isRevealing={isRevealing}
+            isHighContrast={isHighContrast}
           />
         ))}
       </div>
@@ -112,6 +115,7 @@ export const Keyboard = ({
             onClick={onClick}
             status={charStatuses[key]}
             isRevealing={isRevealing}
+            isHighContrast={isHighContrast}
           />
         ))}
       </div>
@@ -126,6 +130,7 @@ export const Keyboard = ({
             onClick={onClick}
             status={charStatuses[key]}
             isRevealing={isRevealing}
+            isHighContrast={isHighContrast}
           />
         ))}
         <Key width={65.4} value="DELETE" onClick={onClick}>

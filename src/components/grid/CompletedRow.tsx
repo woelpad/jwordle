@@ -5,9 +5,10 @@ import { unicodeSplit } from '../../lib/words'
 type Props = {
   guess: string
   isRevealing?: boolean
+  isHighContrast?: boolean
 }
 
-export const CompletedRow = ({ guess, isRevealing }: Props) => {
+export const CompletedRow = ({ guess, isRevealing, isHighContrast }: Props) => {
   const statuses = getGuessStatuses(guess)
   const splitGuess = unicodeSplit(guess)
 
@@ -20,6 +21,7 @@ export const CompletedRow = ({ guess, isRevealing }: Props) => {
           status={statuses[i]}
           position={i}
           isRevealing={isRevealing}
+          isHighContrast={isHighContrast}
           isCompleted
         />
       ))}
