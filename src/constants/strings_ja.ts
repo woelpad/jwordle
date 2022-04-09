@@ -55,7 +55,7 @@ export const SETTINGS_MODAL_JA = {
 export const STATS_MODAL_JA = {
   title: '統計',
   practiceTitle: '練習統計',
-  guessDistribution: '察し数配布',
+  guessDistribution: '回数配布',
   correctWord: (solution: string) =>
     `「${solution}」が解答でした。`,
   newWord: '次のお題まで',

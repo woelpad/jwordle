@@ -41,13 +41,13 @@ export const Keyboard = ({
 
   const topRow: Array<string> = isWordProcessor ? 
     ['G', 'Z', 'D', 'V', 'B', 'P', 'F', 'W'] :
-    ['G', 'Z', 'D', 'B', 'P', '\u0100', '\u012a', '\u016a', '\u0112', '\u014c']
+    ['G', 'Z', 'D', 'B', 'V', '\u0100', '\u012a', '\u016a', '\u0112', '\u014c']
   const midRow: Array<string> = isWordProcessor ?
     ['K', 'S', 'T', 'N', 'H', 'M', 'Y', 'R'] :
-    ['K', 'S', 'T', 'H', 'R', 'A', 'I', 'U', 'E', 'O']
+    ['K', 'S', 'T', 'H', 'F', 'A', 'I', 'U', 'E', 'O']
   const bottomRow: Array<string> = isWordProcessor ?
     ['A', 'I', 'U', 'E', 'O', '\uff0d'] :
-    ['J', 'C', 'F', 'M', 'W', 'Y', 'V', 'N']
+    ['J', 'C', 'P', 'W', 'R', 'Y', 'M', 'N']
   const unusedChars = isWordProcessor ? 'CJLQX' : 'LQX'
   const hyphenatedVowels: { [char: string]: string; } = {
     'A': '\u0100',
