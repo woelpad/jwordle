@@ -297,7 +297,7 @@ function App() {
   }, [guesses])
 
   useEffect(() => {
-    if (isGameWon || isGameLost) {
+    if (!isSettingsModalOpen && (isGameWon || isGameLost)) {
       const messages = isGameWon ? lexicon.alerts.wins : lexicon.alerts.losses
       const message =
         messages[Math.floor(Math.random() * messages.length)]
